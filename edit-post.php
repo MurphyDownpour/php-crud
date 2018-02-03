@@ -6,11 +6,14 @@
 INNER JOIN city ON user.city_id = city.id
 INNER JOIN address ON user.address_id = address.id WHERE user.id = $id";
 	$query2 = "SELECT * FROM city";
+
 	$result1 = mysqli_query($db, $query1);
 	$result2 = mysqli_query($db, $query2);
 
-
 	$user = mysqli_fetch_array($result1);
+
+	$query3 = "SELECT * FROM address WHERE city_id = " . $user['city_id'];
+	$result3 = mysqli_query($db, $query3);
 
 ?>
 
@@ -48,7 +51,13 @@ INNER JOIN address ON user.address_id = address.id WHERE user.id = $id";
 			<div class="form-group">
 				<label for="address">Address:</label>
 				<select class="form-control" id="sel2" name="form_address">
-			        
+			        <?
+			        	while ($addresses = mysqli_fetch_assoc($result3)) {
+			        ?>
+					<option value="<? echo $addresses['id']; ?>" <? 
+						if ($user['address_id'] == $addresses['id']) echo "selected"; 
+					 ?>><? echo $addresses['address_name'] ?></option>
+			        <? } ?>
 		      	</select>
 			</div>
 			<button class="btn btn-success" id="edit">Submit</button>

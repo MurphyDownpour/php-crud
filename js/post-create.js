@@ -1,3 +1,14 @@
+var names;
+$.ajax({
+    url: "check-uniqueness.php",
+    success: function(response){
+        var data = JSON.parse(response);
+        names = data;
+    }
+});
+
+
+
 $(document).ready(function () {
     $("#sel1").change(function () {
         var val = $(this).val();
@@ -32,17 +43,15 @@ $("#post").click(function(){
             'street': street
         },
         success: function(resp){
-            console.log(resp);
+            location.href = "/";
         }
     });
 });
 
 
-
-
 // VALIDATION
 
-jQuery.validator.addMethod("notNumber", function(value, element, param) {
+$.validator.addMethod("notNumber", function(value, element, param) {
            var reg = /[0-9]/;
 
            if(reg.test(value)){
@@ -53,24 +62,17 @@ jQuery.validator.addMethod("notNumber", function(value, element, param) {
 
         }, "Number is not permitted");
 
-jQuery.validator.addMethod("unique", checkingUniqueness, "The name is not unique.");
-
+$.validator.addMethod("unique", checkingUniqueness, "The name is not unique.");
 function checkingUniqueness(value, element) {
-
-   $.ajax({
-        url: 'check-uniqueness.php',
-        data: {
-            name: value
-        },
-        async: false,
-        success: function(resp){
-            return Boolean(resp);
-        },
-        complete: function(){
-            
-        }
+    var result;
+    names.forEach( function(element) {
+        if (element[0] == value)
+            result = false;
+        else
+            result = true;
     });
-} 
+    return this.optional(element) || result;
+}
 
 
 $("#form_create").validate({
@@ -78,6 +80,7 @@ $("#form_create").validate({
         form_name: {
             required: true,
             notNumber: true,
+            unique: true
         },
 
         form_city: {

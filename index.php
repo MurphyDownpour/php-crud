@@ -1,14 +1,3 @@
-<?php 
-
-	$db = mysqli_connect('localhost', 'root', '', 'test');
-	$query = "SELECT user.id, user.name, city.city_name, address.address_name
-			  FROM ((user
-			  INNER JOIN city ON user.city_id = city.id)
-			  INNER JOIN address ON address.id = user.address_id);";
-	$data = mysqli_query($db, $query);
-
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,20 +20,8 @@
 		    <th>Functions</th>
 		  </tr>
 		</thead>
-		<tbody>
-			<?
-				while ($users = mysqli_fetch_assoc($data)) { 
-			 ?>
-		  <tr>
-		    <td><? echo $users['name']; ?></td>
-		    <td><? echo $users['city_name']; ?></td>
-		    <td><? echo $users['address_name']; ?></td>
-		    <td>
-		    	<a class="btn btn-warning edit" href="/edit-post.php?id=<? echo $users['id']; ?>">Edit</a>
-		    	<button class="btn btn-danger delete" value="<? echo $users['id']; ?>">Delete</button>
-		    </td>
-		  </tr>
-		  	<? } ?>
+		<tbody class="tbody">
+			
 		</tbody>
 	</table>
 	<div id="modal">
