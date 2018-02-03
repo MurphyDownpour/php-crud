@@ -64,14 +64,12 @@ $.validator.addMethod("notNumber", function(value, element, param) {
 
 $.validator.addMethod("unique", checkingUniqueness, "The name is not unique.");
 function checkingUniqueness(value, element) {
-    var result;
-    names.forEach( function(element) {
-        if (element[0] == value)
-            result = false;
-        else
-            result = true;
-    });
-    return this.optional(element) || result;
+    var arr = [];
+    for (var i = 0; i < names.length; i++) {
+        arr.push(names[i][0]);
+    }
+    console.log(arr);
+    return this.optional(element) || !arr.includes(value);
 }
 
 
